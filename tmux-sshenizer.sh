@@ -11,7 +11,7 @@ prepare_log() {
     local TYPE="$1"; shift
 	local TEXT="$*"; if [ "$#" -eq 0 ]; then TEXT="$(cat)"; fi
 	local DATETIME; DATETIME="$(date '+%Y-%m-%d %T')"
-    local LOGFILE; LOGFILE='/tmp/fszsfh.log'
+    local LOGFILE; LOGFILE='/tmp/tmux-sshenizer.log'
     echo "$DATETIME [$TYPE] $TEXT" &>> "$LOGFILE"
 }
 
@@ -33,7 +33,7 @@ SOCK_NAME='ssh'
 SOCK_PATH="/tmp/tmux-1000/$SOCK_NAME"
 declare -A CHOICES
 
-# example of CHOICES in 'fszsfh.txt'
+# example of CHOICES in 'tmux-sshenizer.sh'
 #CHOICES+=( [example]='ssh <user>@<example>:<port>' )
 #CHOICES+=( [server]='ssh -oUser=<username> -oIdentityFile=<file> -oPort=<port> <hostname|ip>' )
 
@@ -47,9 +47,9 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
   --marker=">" --pointer="◆"'
 
 # main
-if [ -e "$HOME/.fszsfh.txt" ]; then
-    . "$HOME/.fszsfh.txt" && \
-        log_info "Sourced $HOME/.fszsfh.txt"
+if [ -e "$HOME/.tmux-sshenizer.sh" ]; then
+    . "$HOME/.tmux-sshenizer.sh" && \
+        log_info "Sourced $HOME/.tmux-sshenizer.sh"
 fi
 
 if [ -n "$1" ]; then
