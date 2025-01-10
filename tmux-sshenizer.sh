@@ -46,6 +46,24 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
   --border="rounded" --preview-window="border-rounded" --prompt="> "
   --marker=">" --pointer="◆"'
 
+declare -a COLORS=(
+    "red"
+    "blue"
+    "green"
+    "yellow"
+    "white"
+    "magenta"
+    "brightred"
+    "brightgreen"
+    "brightyellow"
+)
+
+RANDOM=$$$(date +%s)
+
+selected_color=${COLORS[ $RANDOM % ${#COLORS[@]} ]}
+
+log_info "$RANDOM $selected_color"
+
 # main
 if [ -e "$HOME/.tmux-sshenizer.sh" ]; then
     . "$HOME/.tmux-sshenizer.sh" && \
@@ -75,12 +93,12 @@ TMUXPID=$(tmux -L "$SOCK_NAME" list-session -F "#{pid}" 2>/dev/null)
 
 if [ -z "$TMUXPID" ]; then
     log_info "Create new-session -> $CHOICE"
-    tmux -L "$SOCK_NAME" -S "$SOCK_PATH" new-session -s "$CHOICE" "${CHOICES[$CHOICE]}" && exit 70
+    tmux -L "$SOCK_NAME" -S "$SOCK_PATH" new-session -s "$CHOICE" "${CHOICES[$CHOICE]}" \; set status-style bg=$selected_color && exit 70
 fi
 
 if ! tmux -L "$SOCK_NAME" -S "$SOCK_PATH" has-session -t "$CHOICE" 2>/dev/null; then
     log_info "No session exists create new-session -> $CHOICE"
-    tmux -L "$SOCK_NAME" -S "$SOCK_PATH" new-session -d -s "$CHOICE" "${CHOICES[$CHOICE]}" \; switch-client -t "$CHOICE" && exit 70
+    tmux -L "$SOCK_NAME" -S "$SOCK_PATH" new-session -d -s "$CHOICE" "${CHOICES[$CHOICE]}" \; switch-client -t "$CHOICE" \; set status-style bg=$selected_color && exit 70
 fi
 
 if [ -z "$ACTION" ]; then
